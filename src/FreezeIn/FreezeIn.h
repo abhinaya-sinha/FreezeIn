@@ -300,7 +300,7 @@ long double CollisionNum_ffchichi(long double T, long double mchi,
     if ( ( Nf == 1.0L ) || ( (Nf == 3.0L) && (T > LambdaQCD) ) ) {
 
         auto integrand_s = [=] (long double s) {
-            return M2_ffchichi(s, mchi, mf, kappa, Nf, Qf, T3f) *
+            return M2_ffchichi(s, mchi, mf, kappa, Nf, Qf, ma) *
                    sqrt(1.0L - 4.0L*mchi*mchi/s) *
                    sqrt(1.0L - 4.0L*mf*mf/s) *
                    sqrt(s) *
@@ -390,7 +390,7 @@ long double CollisionNum_chi(long double T, long double mchi,
                                                LambdaQCD) + /*s*/
                          CollisionNum_ffchichi(T, mchi, Mb, kappa,
                                                3.0L, qhd, ma,
-                                               LambdaQCD) /*b*/
+                                               LambdaQCD) /*b*/;
 
     return result;
 }
@@ -457,7 +457,7 @@ long double SigmaDDe(long double mchi, long double kappa) {
     long double Ac = 0.5L*kappa*1.0L;
     long double ma = 1.0e-9L;
 
-    return (pow(Muchie(mchi),2.0L)/(M_PI*pow(alphaEM*alphaEM*Me*Me+ma*ma,2.0L)))*(Ae*Ae*Ac*Ac*(3.0L+2.0L*alphaEM*alphaEM*Me*Me/(ma*ma)+pow(alphaEM*me/ma,4.0L))+Ve*Ve*Vc*Vc)*pow(GeVinvtocm, 2.0L);
+    return (pow(Muchie(mchi),2.0L)/(M_PI*pow(alphaEM*alphaEM*Me*Me+ma*ma,2.0L)))*(Ae*Ae*Ac*Ac*(3.0L+2.0L*alphaEM*alphaEM*Me*Me/(ma*ma)+pow(alphaEM*Me/ma,4.0L))+Ve*Ve*Vc*Vc)*pow(GeVinvtocm, 2.0L);
 }
 
 #endif
