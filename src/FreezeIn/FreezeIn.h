@@ -6,11 +6,11 @@
 /********************************/
 
 //Standard libraries
+#include <cmath>/*provides pow, sqrt, ...*/
 #include <iostream>/*standard i/o library*/
 #include <fstream>/*to read/write file*/
 #include <cstdio>/*provides printf*/
 #include <string>/*to use string data type*/
-#include <cmath>/*provides pow, sqrt, ...*/
 #include <vector>/*provides std::vector*/
 
 //Boost C++ library
@@ -250,29 +250,20 @@ long double HoverHbarVisible(long double T) {
 /* Fully averaged squared Matrix elements */
 /******************************************/
 
-//Fully averaged matrix element squared for f f -> Aprime/Z -> chi chi
+//Fully averaged matrix element squared for f f -> Aprime -> chi chi
 long double M2_ffchichi(long double s, long double mchi, long double mf,
                         long double kappa, long double Nf, long double Qf,
-                        long double T3f) {
+                        long double ma) {
 
-    //Vector (Vf) and Axial (Af) pieces of Z-f-f couplings in the SM
-    long double Vf = (T3f - 2.0L*sW2*Qf)/s2W;
-    long double Af = T3f/s2W;
+    //Vector (Vf) and Axial (Af) pieces of Aprime f f couplings
+    long double Vf = 0.5L*kappa*Qf;
+    long double Af = 0.5L*kappa*Qf;
 
-    return (32.0L/3.0L)*Nf*M_PI*M_PI*alphaEM*alphaEM*kappa*kappa*(
-            //Aprime
-            Qf*Qf*(1.0L + 2.0L*mf*mf/s)*(1.0L + 2.0L*mchi*mchi/s)
-            +
-            //Aprime/Z interference
-            tW*tW*(Vf*Vf*(s + 2.0L*mf*mf) + Af*Af*(s - 4.0L*mf*mf))*(
-                (s + 2.0L*mchi*mchi)/(pow(s - MZ*MZ, 2.0L) + MZ*MZ*WZ*WZ)
-                )
-            -
-            //Z
-            2.0L*Qf*Vf*tW*(s + 2.0L*mf*mf)*(s + 2.0L*mchi*mchi)*(
-                (1.0L - MZ*MZ/s)/(pow(s - MZ*MZ, 2.0L) + MZ*MZ*WZ*WZ)
-                )
-            );
+    //Vector(Vc) and Axial (Ac) pieces of Aprime chi chi couplings
+    long double Vc = 0.5L*kappa*1.0L;
+    long double Ac = 0.5L*kappa*1.0L;
+
+    return (1.0L/(2.0L*M_PI))*((1.0L/(12.0L*pow(M_PI,2.0L)))*((1.0L+12.0L*mchi*mchi*mf*mf/pow(ma,4.0L))*Af*Af*Ac*Ac+Af*Af*Vc*Vc+Vf*Vf*Ac*Ac+Vf*Vf*Vc*Vc)+(1.0L/s)*(1.0L/(6*pow(M_PI,2.0L)))*(-2.0L*(mf*mf+mchi*mchi+6.0L*mf*mf*mchi*mchi/pow(ma,2.0L))*Af*Af*Ac*Ac+(mchi*mchi-2.0L*mf*mf)*Af*Af*Ac*Ac+(mf*mf-2.0L*mchi*mchi)*Vf*Vf*Ac*Ac+(mf*mf+mchi*mchi)*Vf*Vf*Vc*Vc)+(1.0L/pow(s,2.0L))*(mf*mf*mchi*mchi/(3.0L*pow(M_PI,2.0L)))*(7*Af*Af*Ac*Ac-2.0L*(Af*Af*Vc*Vc+Vf*Vf*Ac*Ac)+Vf*Vf*Vc*Vc));
 }
 
 //Fully averaged matrix element squared for phi+ phi- -> Aprime -> chi chi
@@ -304,7 +295,7 @@ long double M2_WWchichi(long double s, long double mchi, long double kappa) {
 long double CollisionNum_ffchichi(long double T, long double mchi,
                                   long double mf, long double kappa,
                                   long double Nf, long double Qf,
-                                  long double T3f, long double LambdaQCD) {
+                                  long double ma, long double LambdaQCD) {
 
     if ( ( Nf == 1.0L ) || ( (Nf == 3.0L) && (T > LambdaQCD) ) ) {
 
@@ -316,7 +307,7 @@ long double CollisionNum_ffchichi(long double T, long double mchi,
                    boost::math::cyl_bessel_k(1, sqrt(s)/T);
         };
         
-        return (16.0L*T/pow(4.0L*M_PI, 5.0L)) *
+        return (T/(8*M_PI*pow(2.0L*M_PI, 3))) *
                exp_sinh<long double>().integrate(integrand_s,
                                             max(4.0L*mf*mf, 4.0L*mchi*mchi),
                                             INFINITY);
@@ -369,41 +360,37 @@ long double CollisionNum_WWchichi(long double T, long double mchi,
 long double CollisionNum_chi(long double T, long double mchi,
                              long double kappa, long double LambdaQCD) {
 
-    long double result = CollisionNum_ffchichi(T, mchi, 0.0L, kappa,
-                                               1.0L, 0.0L, 0.5L,
-                                               LambdaQCD)*3.0L + /*neutrinos*/
-                         CollisionNum_ffchichi(T, mchi, Me, kappa,
-                                               1.0L, -1.0L, -0.5L,
+    long double ma = 1.0e-9L /*1 eV in GeV*/;
+    long double qhu = 0.01L;
+    long double qhd = -2.0L;
+
+    long double result = CollisionNum_ffchichi(T, mchi, Me, kappa,
+                                               1.0L, qhd, ma,
                                                LambdaQCD) + /*e*/
                          CollisionNum_ffchichi(T, mchi, Mmu, kappa,
-                                               1.0L, -1.0L, -0.5L,
+                                               1.0L, qhd, ma,
                                                LambdaQCD) + /*mu*/
                          CollisionNum_ffchichi(T, mchi, Mta, kappa,
-                                               1.0L, -1.0L, -0.5L,
+                                               1.0L, qhd, ma,
                                                LambdaQCD) + /*ta*/
                          CollisionNum_ffchichi(T, mchi, Mu, kappa,
-                                               3.0L, 2.0L/3.0L, 0.5L,
+                                               3.0L, qhu, ma,
                                                LambdaQCD) + /*u*/
                          CollisionNum_ffchichi(T, mchi, Mc, kappa,
-                                               3.0L, 2.0L/3.0L, 0.5L,
+                                               3.0L, qhu, ma,
                                                LambdaQCD) + /*c*/
                          CollisionNum_ffchichi(T, mchi, Mt, kappa,
-                                               3.0L, 2.0L/3.0L, 0.5L,
+                                               3.0L, qhu, ma,
                                                LambdaQCD) + /*t*/
                          CollisionNum_ffchichi(T, mchi, Md, kappa,
-                                               3.0L, -1.0L/3.0L, -0.5L,
+                                               3.0L, qhd, ma,
                                                LambdaQCD) + /*d*/
                          CollisionNum_ffchichi(T, mchi, Ms, kappa,
-                                               3.0L, -1.0L/3.0L, -0.5L,
+                                               3.0L, qhd, ma,
                                                LambdaQCD) + /*s*/
                          CollisionNum_ffchichi(T, mchi, Mb, kappa,
-                                               3.0L, -1.0L/3.0L, -0.5L,
-                                               LambdaQCD) + /*b*/
-                         CollisionNum_sschichi(T, mchi, Mpip, kappa,
-                                               LambdaQCD) + /*pi+*/
-                         CollisionNum_sschichi(T, mchi, MKp, kappa,
-                                               LambdaQCD) + /*K+*/
-                         CollisionNum_WWchichi(T, mchi, kappa); /*W*/
+                                               3.0L, qhd, ma,
+                                               LambdaQCD) /*b*/
 
     return result;
 }
@@ -446,9 +433,9 @@ long double Yield_FreezeIn(long double mchi, long double kappa,
 
 //Portal coupling, kappa, for freezing-in the required relic abundance
 long double kappa_FreezeIn(long double mchi, long double LambdaQCD) {
-    return sqrt(
+    return pow(
                 4.37e-10L /
-                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, LambdaQCD))
+                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, LambdaQCD)), 0.25L
                );
 }
 
@@ -463,9 +450,14 @@ long double Muchie(long double mchi) {
 
 //Direct detection cross section in squared-centimeter: \overline{\sigma}_e
 long double SigmaDDe(long double mchi, long double kappa) {
-    return 16.0L*M_PI*alphaEM*alphaEM*kappa*kappa *
-           pow(Muchie(mchi), 2.0L) * pow(GeVinvtocm, 2.0L) /
-           pow((alphaEM * Me), 4.0L);
+
+    long double Ve = 0.5L*kappa*2.0L;
+    long double Ae = 0.5L*kappa*2.0L;
+    long double Vc = 0.5L*kappa*1.0L;
+    long double Ac = 0.5L*kappa*1.0L;
+    long double ma = 1.0e-9L;
+
+    return (pow(Muchie(mchi),2.0L)/(M_PI*pow(alphaEM*alphaEM*Me*Me+ma*ma,2.0L)))*(Ae*Ae*Ac*Ac*(3.0L+2.0L*alphaEM*alphaEM*Me*Me/(ma*ma)+pow(alphaEM*me/ma,4.0L))+Ve*Ve*Vc*Vc)*pow(GeVinvtocm, 2.0L);
 }
 
 #endif
