@@ -372,7 +372,7 @@ long double Yield_FreezeIn(long double mchi, long double kappa, long double ma,
 long double kappa_FreezeIn(long double mchi, long double ma, long double LambdaQCD) {
     return pow(
                 4.37e-10L /
-                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, ma LambdaQCD)), 0.25L
+                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, ma, LambdaQCD)), 0.25L
                );
 }
 
