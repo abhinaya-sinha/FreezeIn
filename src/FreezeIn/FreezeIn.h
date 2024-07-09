@@ -335,7 +335,7 @@ long double NumEq(long double T, long double m, int dof) {
 
 //Thermally-averaged cross section
 long double SigmaV_chi(long double T, long double mchi, long double kappa,long double LambdaQCD) {
-    ma = 1e-9; /* PLACEHOLDER */
+    long double ma = 1e-9; /* PLACEHOLDER */
     return CollisionNum_chi(T, mchi, kappa, ma, LambdaQCD) /
            pow(NumEq(T, mchi, 2), 2.0L);
 }
