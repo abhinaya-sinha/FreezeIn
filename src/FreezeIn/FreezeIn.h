@@ -251,9 +251,7 @@ long double HoverHbarVisible(long double T) {
 /******************************************/
 
 //Fully averaged matrix element squared for f f -> Aprime -> chi chi
-long double M2_ffchichi(long double s, long double mchi, long double mf,
-                        long double kappa, long double Nf, long double Qf,
-                        long double ma) {
+long double M2_ffchichi(long double s, long double mchi, long double mf,long double kappa, long double Nf, long double Qf,long double ma) {
 
     //Vector (Vf) and Axial (Af) pieces of Aprime f f couplings
     long double Vf = 0.5L*kappa*Qf;
@@ -271,19 +269,12 @@ long double M2_ffchichi(long double s, long double mchi, long double mf,
 /****************************************/
 
 //Number-density collision term for f f -> Aprime/Z -> Chi Chi
-long double CollisionNum_ffchichi(long double T, long double mchi,
-                                  long double mf, long double kappa,
-                                  long double Nf, long double Qf,
-                                  long double ma, long double LambdaQCD) {
+long double CollisionNum_ffchichi(long double T, long double mchi,long double mf, long double kappa,long double Nf, long double Qf,long double ma, long double LambdaQCD) {
 
     if ( ( Nf == 1.0L ) || ( (Nf == 3.0L) && (T > LambdaQCD) ) ) {
 
         auto integrand_s = [=] (long double s) {
-            return M2_ffchichi(s, mchi, mf, kappa, Nf, Qf, ma) * (s*s/pow(s-ma*ma,2.0L))
-                   sqrt(1.0L - 4.0L*mchi*mchi/s) *
-                   sqrt(1.0L - 4.0L*mf*mf/s) *
-                   sqrt(s) *
-                   boost::math::cyl_bessel_k(1, sqrt(s)/T);
+            return M2_ffchichi(s, mchi, mf, kappa, Nf, Qf, ma) * (s*s/pow(s-ma*ma,2.0L)) * sqrt(1.0L - 4.0L*mchi*mchi/s) * sqrt(1.0L - 4.0L*mf*mf/s) * sqrt(s) * boost::math::cyl_bessel_k(1, sqrt(s)/T);
         };
         
         return (T/(8*M_PI*pow(2.0L*M_PI, 3))) *
@@ -295,8 +286,7 @@ long double CollisionNum_ffchichi(long double T, long double mchi,
 }
 
 //Sum of all number-density collision terms for portal freeze-in
-long double CollisionNum_chi(long double T, long double mchi,
-                             long double kappa, long double ma, long double LambdaQCD) {
+long double CollisionNum_chi(long double T, long double mchi, long double kappa, long double ma, long double LambdaQCD) {
 
     long double qhu = 0.01L;
     long double qhd = -2.0L;
@@ -344,10 +334,9 @@ long double NumEq(long double T, long double m, int dof) {
 }
 
 //Thermally-averaged cross section
-long double SigmaV_chi(long double T, long double mchi, long double kappa,
-                       long double LambdaQCD) {
-    
-    return CollisionNum_chi(T, mchi, kappa, LambdaQCD) /
+long double SigmaV_chi(long double T, long double mchi, long double kappa,long double LambdaQCD) {
+    ma = 1e-9; /* PLACEHOLDER */
+    return CollisionNum_chi(T, mchi, kappa, ma, LambdaQCD) /
            pow(NumEq(T, mchi, 2), 2.0L);
 }
 
@@ -356,8 +345,7 @@ long double SigmaV_chi(long double T, long double mchi, long double kappa,
 /*****************************/
 
 //Portal Yield for Chi
-long double Yield_FreezeIn(long double mchi, long double kappa, long double ma,
-                           long double LambdaQCD) {
+long double Yield_FreezeIn(long double mchi, long double kappa, long double ma,long double LambdaQCD) {
 
     auto integrand_T = [=] (long double T) {
         return HoverHbarVisible(T) *
