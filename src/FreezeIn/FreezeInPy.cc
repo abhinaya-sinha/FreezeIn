@@ -135,7 +135,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     Hubble rate
     )pbdoc", py::arg("T"));
 
-    //SigmaV_chi(T, mchi, kappa, LambdaQCD)
+    //SigmaV_chi(T, mchi, kappa, qhu, qhd, ma, LambdaQCD)
     mod.def("SigmaV_chi", &SigmaV_chi, R"pbdoc(
     Inputs
     ------
@@ -143,14 +143,16 @@ PYBIND11_MODULE(FreezeIn, mod)
     T: Temperature in the visible sector in GeV
     mchi: mass of the dark matter in GeV
     kappa: portal coupling
+    qhu: up-type Higgs charge
+    qhd: double-type Higgs charge
+    ma: dark photon mass
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
 
     Returns
     -------
 
     Thermally-averaged cross section for SM SMbar -> chi chibar process
-    )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"),
-             py::arg("LambdaQCD")=0.15);
+    )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15);
 
     //kappa_FreezeIn(mchi, LambdaQCD)
     mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(
@@ -158,6 +160,8 @@ PYBIND11_MODULE(FreezeIn, mod)
     ------
 
     mchi: mass of the dark matter in GeV
+    qhu: up-type Higgs charge
+    qhd: down-type Higgs charge
     ma: mass of dark photon in GeV
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
 
@@ -166,7 +170,7 @@ PYBIND11_MODULE(FreezeIn, mod)
 
     Portal coupling kappa that reproduces the observed dark matter relic
     abundance for dark matter frozen-in via a light dark photon mediator
-    )pbdoc", py::arg("mchi"), py::arg("ma"), py::arg("LambdaQCD")=0.15);
+    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15);
 
     //SigmaDDe(mchi, kappa)
     mod.def("SigmaDDe", &SigmaDDe, R"pbdoc(
@@ -175,6 +179,7 @@ PYBIND11_MODULE(FreezeIn, mod)
 
     mchi: mass of the dark matter in GeV
     kappa: portal coupling
+    qhd: down-type Higgs charge
     ma: mass of dark photon
 
     Returns
@@ -182,7 +187,7 @@ PYBIND11_MODULE(FreezeIn, mod)
 
     Direct detection cross section (in cm^2) through the light dark photon
     mediator
-    )pbdoc", py::arg("mchi"), py::arg("kappa"), py::arg("ma"));
+    )pbdoc", py::arg("mchi"), py::arg("kappa"), py::arg("qhd"), py::arg("ma"));
 
     
 };

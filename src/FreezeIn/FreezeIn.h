@@ -286,10 +286,7 @@ long double CollisionNum_ffchichi(long double T, long double mchi,long double mf
 }
 
 //Sum of all number-density collision terms for portal freeze-in
-long double CollisionNum_chi(long double T, long double mchi, long double kappa, long double ma, long double LambdaQCD) {
-
-    long double qhu = 0.01L;
-    long double qhd = -2.0L;
+long double CollisionNum_chi(long double T, long double mchi, long double kappa, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
 
     long double result = CollisionNum_ffchichi(T, mchi, Me, kappa,
                                                1.0L, qhd, ma,
@@ -334,9 +331,8 @@ long double NumEq(long double T, long double m, int dof) {
 }
 
 //Thermally-averaged cross section
-long double SigmaV_chi(long double T, long double mchi, long double kappa,long double LambdaQCD) {
-    long double ma = 1e-9; /* PLACEHOLDER */
-    return CollisionNum_chi(T, mchi, kappa, ma, LambdaQCD) /
+long double SigmaV_chi(long double T, long double mchi, long double kappa, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
+    return CollisionNum_chi(T, mchi, kappa, qhu, qhd, ma, LambdaQCD) /
            pow(NumEq(T, mchi, 2), 2.0L);
 }
 
@@ -345,7 +341,7 @@ long double SigmaV_chi(long double T, long double mchi, long double kappa,long d
 /*****************************/
 
 //Portal Yield for Chi
-long double Yield_FreezeIn(long double mchi, long double kappa, long double ma,long double LambdaQCD) {
+long double Yield_FreezeIn(long double mchi, long double kappa, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
 
     auto integrand_T = [=] (long double T) {
         return HoverHbarVisible(T) *
@@ -357,10 +353,10 @@ long double Yield_FreezeIn(long double mchi, long double kappa, long double ma,l
 }
 
 //Portal coupling, kappa, for freezing-in the required relic abundance
-long double kappa_FreezeIn(long double mchi, long double ma, long double LambdaQCD) {
+long double kappa_FreezeIn(long double mchi, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
     return pow(
                 4.37e-10L /
-                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, ma, LambdaQCD)), 0.25L
+                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, qhu, qhd, ma, LambdaQCD)), 0.25L
                );
 }
 
@@ -374,10 +370,10 @@ long double Muchie(long double mchi) {
 }
 
 //Direct detection cross section in squared-centimeter: \overline{\sigma}_e
-long double SigmaDDe(long double mchi, long double kappa, long double ma) {
+long double SigmaDDe(long double mchi, long double kappa, long double qhd, long double ma) {
 
-    long double Ve = 0.5L*kappa*2.0L;
-    long double Ae = 0.5L*kappa*2.0L;
+    long double Ve = 0.5L*kappa*qhd;
+    long double Ae = 0.5L*kappa*qhd;
     long double Vc = 0.5L*kappa*1.0L;
     long double Ac = 0.5L*kappa*1.0L;
 
