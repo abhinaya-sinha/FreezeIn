@@ -345,7 +345,7 @@ long double Yield_FreezeIn(long double mchi, long double kappa, long double qhu,
 
     auto integrand_T = [=] (long double T) {
         return HoverHbarVisible(T) *
-               CollisionNum_chi(T, mchi, kappa, ma, LambdaQCD) /
+               CollisionNum_chi(T, mchi, kappa, qhu, qhd, ma, LambdaQCD) /
                (gstarS(T)*sqrt(gstar(T))*pow(T, 6.0L));
     };
     return (135.0L*sqrt(10.0L)*MPl/(2.0L*pow(M_PI, 3.0L))) *
