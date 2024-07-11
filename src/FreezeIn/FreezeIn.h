@@ -341,7 +341,7 @@ long double SigmaV_chi(long double T, long double mchi, long double kappa, long 
 /*****************************/
 
 //Portal Yield for Chi
-long double Yield_FreezeIn(long double mchi, long double kappa, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
+long double Yield_FreezeIn(long double mchi, long double kappa, long double qhu, long double qhd, long double ma, long double LambdaQCD, long double Trh) {
 
     auto integrand_T = [=] (long double T) {
         return HoverHbarVisible(T) *
@@ -349,14 +349,17 @@ long double Yield_FreezeIn(long double mchi, long double kappa, long double qhu,
                (gstarS(T)*sqrt(gstar(T))*pow(T, 6.0L));
     };
     return (135.0L*sqrt(10.0L)*MPl/(2.0L*pow(M_PI, 3.0L))) *
-           gauss<long double, 701>().integrate(integrand_T, 0.0L, INFINITY);
+           gauss<long double, 701>().integrate(integrand_T, 0.0L, Trh);
 }
 
 //Portal coupling, kappa, for freezing-in the required relic abundance
-long double kappa_FreezeIn(long double mchi, long double qhu, long double qhd, long double ma, long double LambdaQCD) {
+long double kappa_FreezeIn(long double mchi, long double qhu, long double qhd, long double ma, long double LambdaQCD, long double Trh) {
+    if (Trh == 0.0L) {
+        Trh = INFINITY;
+    }
     return pow(
                 4.37e-10L /
-                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, qhu, qhd, ma, LambdaQCD)), 0.25L
+                (2.0L * mchi * Yield_FreezeIn(mchi, 1.0L, qhu, qhd, ma, LambdaQCD, Trh)), 0.25L
                );
 }
 

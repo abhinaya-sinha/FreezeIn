@@ -164,13 +164,14 @@ PYBIND11_MODULE(FreezeIn, mod)
     qhd: down-type Higgs charge
     ma: mass of dark photon in GeV
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
+    Trh: instantaneous reheating temperature
 
     Returns
     -------
 
     Portal coupling kappa that reproduces the observed dark matter relic
     abundance for dark matter frozen-in via a light dark photon mediator
-    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15);
+    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
 
     //SigmaDDe(mchi, kappa)
     mod.def("SigmaDDe", &SigmaDDe, R"pbdoc(
