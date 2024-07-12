@@ -135,7 +135,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     Hubble rate
     )pbdoc", py::arg("T"));
 
-    //SigmaV_chi(T, mchi, kappa, qhu, qhd, ma, LambdaQCD)
+    //SigmaV_chi(T, mchi, kappa, qhu, qhd, ma, anom_mass, LambdaQCD)
     mod.def("SigmaV_chi", &SigmaV_chi, R"pbdoc(
     Inputs
     ------
@@ -146,15 +146,16 @@ PYBIND11_MODULE(FreezeIn, mod)
     qhu: up-type Higgs charge
     qhd: double-type Higgs charge
     ma: dark photon mass
+    anom_mass: anomalon mass scale. Set to 0 = no anomalons by default
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
 
     Returns
     -------
 
     Thermally-averaged cross section for SM SMbar -> chi chibar process
-    )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15);
+    )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15);
 
-    //kappa_FreezeIn(mchi, LambdaQCD)
+    //kappa_FreezeIn(mchi, qhu, qhd, ma, anom_mass, LambdaQCD, Trh)
     mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(
     Inputs
     ------
@@ -163,15 +164,16 @@ PYBIND11_MODULE(FreezeIn, mod)
     qhu: up-type Higgs charge
     qhd: down-type Higgs charge
     ma: mass of dark photon in GeV
+    anom_mass: anomalon mass scale. Set to 0 = no anomalons by default
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
-    Trh: instantaneous reheating temperature
+    Trh: instantaneous reheating temperature. Setting to 0.0 will set it to infinity
 
     Returns
     -------
 
     Portal coupling kappa that reproduces the observed dark matter relic
     abundance for dark matter frozen-in via a light dark photon mediator
-    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
+    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
 
     //SigmaDDe(mchi, kappa)
     mod.def("SigmaDDe", &SigmaDDe, R"pbdoc(
