@@ -316,7 +316,7 @@ long double CollisionNum_chi(long double T, long double mchi, long double kappa,
                                                3.0L, qhd, ma,
                                                LambdaQCD) /*b*/;
 
-    if (anom != 0.0) {
+    if (anom_mass != 0.0) {
         result = result + CollisionNum_ffchichi(T, mchi, anom_mass, kappa, 3.0L, qhu, ma, LambdaQCD) /*U*/ + CollisionNum_ffchichi(T, mchi, anom_mass, kappa, 3.0L, qhd, ma, LambdaQCD) /*D*/ + CollisionNum_ffchichi(T, mchi, anom_mass, kappa, 1.0L, qhd, ma, LambdaQCD) /*E*/;
     }
 
