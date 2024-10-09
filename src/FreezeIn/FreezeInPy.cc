@@ -155,8 +155,28 @@ PYBIND11_MODULE(FreezeIn, mod)
     Thermally-averaged cross section for SM SMbar -> chi chibar process
     )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15);
 
+    //Yield_FreezeIn(mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD, Trh)
+    mod.def("Yield_FreezeIn", &Yield_FreezeIn, R"pbdoc(
+    Inputs
+    ------
+
+    mchi: mass of the dark matter in GeV
+    Ve: Vector coupling of dark photon to leptons
+    Ae: Axial coupling of dark photon to leptons
+    Vu: Vector coupling of dark photon to up-type quarks
+    Au: Axial coupling of dark photon to up-type quarks
+    Vd: Vector coupling of dark photon to down-type quarks
+    Ad: Axial coupling of dark photon to down-type quarks
+    Vc: Vector coupling of dark photon to dark matter fermion
+    Ac: Axial coupling of dark photon to dark matter fermion
+    ma: Mass of dark photon
+    anom_mass: Mass of anomalons in GeV. Set to 0 = no anomalons by default
+    LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
+    Trh: "instantaneous reheating temperature". Set to Infinity by default
+    )pbdoc",py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vu"), py::arg("Au"), py::arg("Vd"), py::arg("Ad"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::atg("Trh")=0.0);
+
     //kappa_FreezeIn(mchi, qhu, qhd, ma, anom_mass, LambdaQCD, Trh)
-    mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(
+    /*mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(
     Inputs
     ------
 
@@ -174,15 +194,17 @@ PYBIND11_MODULE(FreezeIn, mod)
     Portal coupling kappa that reproduces the observed dark matter relic
     abundance for dark matter frozen-in via a light dark photon mediator
     )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
-
+*/
     //SigmaDDe(mchi, kappa)
     mod.def("SigmaDDe", &SigmaDDe, R"pbdoc(
     Inputs
     ------
 
     mchi: mass of the dark matter in GeV
-    kappa: portal coupling
-    qhd: down-type Higgs charge
+    Ve: Vector coupling of dark photon to electrons
+    Ae: Axial coupling of dark photon to electrions
+    Vc: Vector coupling of dark photon to dark matter fermion
+    Ac: Axial coupling of dark photon to dark matter fermion
     ma: mass of dark photon
 
     Returns
@@ -190,7 +212,6 @@ PYBIND11_MODULE(FreezeIn, mod)
 
     Direct detection cross section (in cm^2) through the light dark photon
     mediator
-    )pbdoc", py::arg("mchi"), py::arg("kappa"), py::arg("qhd"), py::arg("ma"));
+    )pbdoc", py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"));
 
-    
 };
