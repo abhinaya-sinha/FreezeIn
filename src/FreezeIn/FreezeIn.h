@@ -262,7 +262,7 @@ long double M2_ffchichi(long double s, long double mchi, long double mf, long do
 /****************************************/
 
 //Number-density collision term for f f -> Aprime/Z -> Chi Chi
-long double CollisionNum_ffchichi(long double T, long double mchi,long double mf, long double Nf, long double Vf, long double Af, long double Vc, long double Ac, long double ma, long double LambdaQCD) {
+long double CollisionNum_ffchichi(long double T, long double mchi,long double mf, long double Vf, long double Af, long double Vc, long double Ac, long double Nf, long double ma, long double LambdaQCD) {
 
     if ( ( Nf == 1.0L ) || ( (Nf == 3.0L) && (T > LambdaQCD) ) ) {
 
@@ -348,6 +348,7 @@ long double Yield_FreezeIn(long double mchi, long double Ve, long double Ae, lon
     return (135.0L*sqrt(10.0L)*MPl/(2.0L*pow(M_PI, 3.0L))) *
            gauss<long double, 701>().integrate(integrand_T, 0.0L, Trh);
 }
+
 
 //Portal coupling, kappa, for freezing-in the required relic abundance
 /*long double kappa_FreezeIn(long double mchi, long double qhu, long double qhd, long double ma, long double anom_mass, long double LambdaQCD, long double Trh) {
