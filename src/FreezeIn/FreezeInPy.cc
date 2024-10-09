@@ -136,7 +136,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     )pbdoc", py::arg("T"));
 
     //SigmaV_chi(T, mchi, kappa, qhu, qhd, ma, anom_mass, LambdaQCD)
-    mod.def("SigmaV_chi", &SigmaV_chi, R"pbdoc(
+    /*mod.def("SigmaV_chi", &SigmaV_chi, R"pbdoc(
     Inputs
     ------
 
@@ -154,7 +154,7 @@ PYBIND11_MODULE(FreezeIn, mod)
 
     Thermally-averaged cross section for SM SMbar -> chi chibar process
     )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15);
-
+*/
     //Yield_FreezeIn(mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD, Trh)
     mod.def("Yield_FreezeIn", &Yield_FreezeIn, R"pbdoc(
     Inputs
@@ -173,7 +173,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     anom_mass: Mass of anomalons in GeV. Set to 0 = no anomalons by default
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
     Trh: "instantaneous reheating temperature". Set to Infinity by default
-    )pbdoc",py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vu"), py::arg("Au"), py::arg("Vd"), py::arg("Ad"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::atg("Trh")=0.0);
+    )pbdoc",py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vu"), py::arg("Au"), py::arg("Vd"), py::arg("Ad"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
 
     //kappa_FreezeIn(mchi, qhu, qhd, ma, anom_mass, LambdaQCD, Trh)
     /*mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(

@@ -7,11 +7,16 @@
 
 import os
 import sys
+import platform
 from setuptools import setup, find_packages
 
 ##################
 # Pybind Library #
 ##################
+
+# Set MACOSX_DEPLOYMENT_TARGET only if we are on macOS
+if platform.system() == 'Darwin':
+    os.environ['MACOSX_DEPLOYMENT_TARGET'] = '10.15'
 
 DIR = os.path.abspath(os.path.dirname(__file__))
 sys.path.append(os.path.join(DIR, "extern", "pybind11"))
@@ -33,8 +38,8 @@ FreezeIn = Pybind11Extension(
         os.path.join(DIR, 'extern', 'pybind11', 'include')
     ],
     extra_compile_args = [
-        #"-H",
-        '-std=c++14'
+#        "-H",
+#        '-std=c++14'
     ]
 )
 
@@ -47,7 +52,7 @@ with open("README.md", "r") as README:
 
 setup(
     name="FreezeIn",
-    version="1.0",
+    version="2.0",
     author="Prudhvi Bhattiprolu",
     author_email="prudhvibhattiprolu@gmail.com",
     description="Computes the portal coupling that reproduces the observed\
@@ -59,6 +64,10 @@ setup(
     url="https://github.com/prudhvibhattiprolu/FreezeIn",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
+    package_data={
+        '': ['gstar/*.tab']
+    },
+    include_package_data=True,
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
