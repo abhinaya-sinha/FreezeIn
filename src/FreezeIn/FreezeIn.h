@@ -340,6 +340,9 @@ long double NumEq(long double T, long double m, int dof) {
 //Portal Yield for Chi
 long double Yield_FreezeIn(long double mchi, long double Ve, long double Ae, long double Vu, long double Au, long double Vd, long double Ad, long double Vc, long double Ac, long double ma, long double anom_mass, long double LambdaQCD, long double Trh) {
 
+if (Trh == 0) {
+    Trh = INFINITY;
+}
     auto integrand_T = [=] (long double T) {
         return HoverHbarVisible(T) *
                CollisionNum_chi(T, mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD) /
