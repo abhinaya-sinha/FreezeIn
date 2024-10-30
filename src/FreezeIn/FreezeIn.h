@@ -252,25 +252,30 @@ long double HoverHbarVisible(long double T) {
 /* Fully averaged squared Matrix elements */
 /******************************************/
 
-//Fully averaged matrix element squared for f f -> Aprime -> chi chi
-long double M2_ffchichi(long double s, long double mchi, long double mf, long double Vf, long double Af, long double Vc, long double Ac, long double ma) {
-    return (1.0L/(2.0L*M_PI))*((1.0L/(12.0L*pow(M_PI,2.0L)))*((1.0L+12.0L*mchi*mchi*mf*mf/pow(ma,4.0L))*Af*Af*Ac*Ac+Af*Af*Vc*Vc+Vf*Vf*Ac*Ac+Vf*Vf*Vc*Vc)+(1.0L/s)*(1.0L/(6*pow(M_PI,2.0L)))*(-2.0L*(mf*mf+mchi*mchi+6.0L*mf*mf*mchi*mchi/pow(ma,2.0L))*Af*Af*Ac*Ac+(mchi*mchi-2.0L*mf*mf)*Af*Af*Ac*Ac+(mf*mf-2.0L*mchi*mchi)*Vf*Vf*Ac*Ac+(mf*mf+mchi*mchi)*Vf*Vf*Vc*Vc)+(1.0L/pow(s,2.0L))*(mf*mf*mchi*mchi/(3.0L*pow(M_PI,2.0L)))*(7.0L*Af*Af*Ac*Ac-2.0L*(Af*Af*Vc*Vc+Vf*Vf*Ac*Ac)+Vf*Vf*Vc*Vc));
+//fully averaged matrix element squared for f f -> Aprime -> chi chi integrated over chi phase space
+long double Phi_chichiM2_ffchichi(long double s, long double mchi, long double mf, long double Vf, long double Af, long double Vc, long double Ac, long double ma) {
+    
+    long double C0 = (1.0L/(12.0L*M_PI*M_PI)) * ((1+12.0L*mf*mf*mchi*mchi/pow(ma,4.0L))*Af*Af*Ac*Ac+Af*Af*Vc*Vc+Vf*Vf*Ac*Ac+Vf*Vf*Vc*Vc);
+    long double C1 = (1.0L/(6.0L*M_PI*M_PI)) * (-2.0L*(mf*mf+mchi*mchi+6.0L*mf*mf*mchi*mchi/pow(ma,2.0L))*Af*Af*Ac*Ac+(mchi*mchi-2.0L*mf*mf)*Af*Af*Vc*Vc+(mf*mf-2.0*mchi*mchi)*Vf*Vf*Ac*Ac+(mchi*mchi+mf*mf)*Vf*Vf*Vc*Vc);
+    long double C2 = (mf*mf*mchi*mchi/(3.0L*M_PI*M_PI))*(7.0L*Af*Af*Ac*Ac-2.0L*(Af*Af*Vc*Vc+Vf*Vf*Ac*Ac)+Vf*Vf*Vc*Vc);
+
+    return sqrt(1.0L - 4.0L*mchi*mchi/s) * (s*s/pow(s-ma*ma,2.0L)) * (C0+C1/s+C2/(s*s));
 }
 
 /****************************************/
 /* Collision terms for number densities */
 /****************************************/
 
-//Number-density collision term for f f -> Aprime/Z -> Chi Chi
+//Number-density collision term for f f -> Aprime -> Chi Chi
 long double CollisionNum_ffchichi(long double T, long double mchi,long double mf, long double Vf, long double Af, long double Vc, long double Ac, long double Nf, long double ma, long double LambdaQCD) {
 
     if ( ( Nf == 1.0L ) || ( (Nf == 3.0L) && (T > LambdaQCD) ) ) {
 
         auto integrand_s = [=] (long double s) {
-            return M2_ffchichi(s, mchi, mf, Vf, Af, Vc, Ac, ma) * (s*s/pow(s-ma*ma,2.0L)) * sqrt(1.0L - 4.0L*mchi*mchi/s) * sqrt(1.0L - 4.0L*mf*mf/s) * sqrt(s) * boost::math::cyl_bessel_k(1, sqrt(s)/T);
+            return sqrt(s) * (1.0L/(8*M_PI)) * sqrt(1.0L - 4.0L*mf*mf/s) * Phi_chichiM2_ffchichi(s, mchi, mf, Vf, Af, Vc, Ac, ma) *boost::math::cyl_bessel_k(1, sqrt(s)/T);
         };
         
-        return (T/(8*M_PI*pow(2.0L*M_PI, 3))) *
+        return (T/(pow(2.0L*M_PI, 3))) *
                exp_sinh<long double>().integrate(integrand_s,
                                             max(4.0L*mf*mf, 4.0L*mchi*mchi),
                                             INFINITY);
@@ -344,8 +349,7 @@ if (Trh == 0) {
     Trh = INFINITY;
 }
     auto integrand_T = [=] (long double T) {
-        return HoverHbarVisible(T) *
-               CollisionNum_chi(T, mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD) /
+        return /*HoverHbarVisible(T) **/ CollisionNum_chi(T, mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD) /
                (gstarS(T)*sqrt(gstar(T))*pow(T, 6.0L));
     };
     return (135.0L*sqrt(10.0L)*MPl/(2.0L*pow(M_PI, 3.0L))) *
