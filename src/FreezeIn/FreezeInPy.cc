@@ -50,6 +50,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     ------
 
     T: Temperature in the visible sector in GeV
+    anom_mass: mass of additional anomalons 10TeV by default
 
     Returns
     -------
@@ -59,7 +60,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     (By default uses the standard Gondolo-Gelmini g*(T). To use other choices
     for g*: evaluate Read_gstar(choice); see documentation for the function
     Read_gstar for more details.)
-    )pbdoc", py::arg("T"));
+    )pbdoc", py::arg("T"),py::arg("anom_mass")=10000.0);
     
     //gstarS(T)
     mod.def("gstarS", &gstarS, R"pbdoc(
@@ -67,6 +68,7 @@ PYBIND11_MODULE(FreezeIn, mod)
     ------
 
     T: Temperature in the visible sector in GeV
+    anom_mass: mass of additional anomalons 10TeV by default
 
     Returns
     -------
@@ -76,26 +78,9 @@ PYBIND11_MODULE(FreezeIn, mod)
     (By default uses the standard Gondolo-Gelmini g*S(T). To use other choices
     for g*S: evaluate Read_gstar(choice); see documentation for the function
     Read_gstar for more details.)
-    )pbdoc", py::arg("T"));
+    )pbdoc", py::arg("T"),py::arg("anom_mass")=10000.0);
     
-    //dlngstarSdlnT(T)
-    mod.def("dlngstarSdlnT", &dlngstarSdlnT, R"pbdoc(
-    Inputs
-    ------
-
-    T: Temperature in the visible sector in GeV
-
-    Returns
-    -------
-
-    The derivative of log(g*S) with respect to log(T), where g*S is the
-    effective number of degrees of freedom for entropy density
-
-    (By default uses the standard Gondolo-Gelmini g*S(T). To use other choices
-    for g*S: evaluate Read_gstar(choice); see documentation for the function
-    Read_gstar for more details.)
-    )pbdoc", py::arg("T"));
-    
+    /*
     //RhoVisible(T)
     mod.def("RhoVisible", &RhoVisible, R"pbdoc(
     Inputs
@@ -133,28 +118,8 @@ PYBIND11_MODULE(FreezeIn, mod)
     -------
 
     Hubble rate
-    )pbdoc", py::arg("T"));
+    )pbdoc", py::arg("T")); */
 
-    //SigmaV_chi(T, mchi, kappa, qhu, qhd, ma, anom_mass, LambdaQCD)
-    /*mod.def("SigmaV_chi", &SigmaV_chi, R"pbdoc(
-    Inputs
-    ------
-
-    T: Temperature in the visible sector in GeV
-    mchi: mass of the dark matter in GeV
-    kappa: portal coupling
-    qhu: up-type Higgs charge
-    qhd: double-type Higgs charge
-    ma: dark photon mass
-    anom_mass: anomalon mass scale. Set to 0 = no anomalons by default
-    LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
-
-    Returns
-    -------
-
-    Thermally-averaged cross section for SM SMbar -> chi chibar process
-    )pbdoc", py::arg("T"), py::arg("mchi"), py::arg("kappa"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15);
-*/
     //Yield_FreezeIn(mchi, Ve, Ae, Vu, Au, Vd, Ad, Vc, Ac, ma, anom_mass, LambdaQCD, Trh)
     mod.def("Yield_FreezeIn", &Yield_FreezeIn, R"pbdoc(
     Inputs
@@ -173,28 +138,16 @@ PYBIND11_MODULE(FreezeIn, mod)
     anom_mass: Mass of anomalons in GeV. Set to 0 = no anomalons by default
     LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
     Trh: "instantaneous reheating temperature". Set to Infinity by default
-    )pbdoc",py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vu"), py::arg("Au"), py::arg("Vd"), py::arg("Ad"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
+    Vebewsb: Vector coupling of dark photon to leptons before EWSB
+    Aebewsb: Axial coupling of dark photon to leptons before EWSB
+    Vubewsb: Vector coupling of dark photon to up-type quarks before EWSB
+    Aubewsb: Axial coupling of dark photon to up-type quarks before EWSB
+    Vdbewsb: Vector coupling of dark photon to down-type quarks before EWSB
+    Adbewsb: Axial coupling of dark photon to down-type quarks before EWSB
+    Vcbewsb: Vector coupling of dark photon to dark matter fermion before EWSB
+    Acbewsb: Axial coupling of dark photon to dark matter fermion before EWSB
+    )pbdoc",py::arg("mchi"), py::arg("Ve"), py::arg("Ae"), py::arg("Vu"), py::arg("Au"), py::arg("Vd"), py::arg("Ad"), py::arg("Vc"), py::arg("Ac"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0, py::arg("Vebewsb")=0.0, py::arg("Aebewsb")=0.0,py::arg("Vubewsb")=0.0,py::arg("Aubewsb")=0.0,py::arg("Vdbewsb")=0.0,py::arg("Adbewsb")=0.0,py::arg("Vcbewsb")=0.0,py::arg("Acbewsb")=0.0);
 
-    //kappa_FreezeIn(mchi, qhu, qhd, ma, anom_mass, LambdaQCD, Trh)
-    /*mod.def("kappa_FreezeIn", &kappa_FreezeIn, R"pbdoc(
-    Inputs
-    ------
-
-    mchi: mass of the dark matter in GeV
-    qhu: up-type Higgs charge
-    qhd: down-type Higgs charge
-    ma: mass of dark photon in GeV
-    anom_mass: anomalon mass scale. Set to 0 = no anomalons by default
-    LambdaQCD: QCD confinement scale in GeV. Set to 0.15 GeV by default
-    Trh: instantaneous reheating temperature. Setting to 0.0 will set it to infinity
-
-    Returns
-    -------
-
-    Portal coupling kappa that reproduces the observed dark matter relic
-    abundance for dark matter frozen-in via a light dark photon mediator
-    )pbdoc", py::arg("mchi"), py::arg("qhu"), py::arg("qhd"), py::arg("ma"), py::arg("anom_mass")=0.0, py::arg("LambdaQCD")=0.15, py::arg("Trh")=0.0);
-*/
     //SigmaDDe(mchi, kappa)
     mod.def("SigmaDDe", &SigmaDDe, R"pbdoc(
     Inputs
